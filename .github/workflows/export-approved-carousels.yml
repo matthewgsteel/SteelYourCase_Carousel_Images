@@ -1,0 +1,31 @@
+name: Export approved carousel PNGs
+on:
+  workflow_dispatch:
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify the original approved PNG files
+        run: |
+          cat > /tmp/expected-sha256.txt <<'SHA'
+          e6a0ac24f7a1503d6798dbe40646fb04e0646cfbd5044ba66bbf517775471ec8  2026-10-18-employment-immigration/01.png
+          c6554552db906b2634ca89d5b92aac1a8b5e0714d5869a6e299306cccc21d7d0  2026-10-18-employment-immigration/02.png
+          a669c2eae36cac2b195f36436a1c32f12b282d65975cc6e0f86443c006847c84  2026-10-18-employment-immigration/03.png
+          df5bd556dbf3210220a6fa50ddcf71c84c13c104a0b9d86bdcc13614b04b8774  2026-10-18-employment-immigration/04.png
+          223114a5b73003ea21c37215adbe3aae70f41b161d8e30d27ca87660081422bc  2026-10-18-employment-immigration/05.png
+          SHA
+          sha256sum -c /tmp/expected-sha256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SteelYourCase_Employment_Immigration_Squares
+          path: |
+            2026-10-18-employment-immigration/01.png
+            2026-10-18-employment-immigration/02.png
+            2026-10-18-employment-immigration/03.png
+            2026-10-18-employment-immigration/04.png
+            2026-10-18-employment-immigration/05.png
+          retention-days: 1
+          compression-level: 0
