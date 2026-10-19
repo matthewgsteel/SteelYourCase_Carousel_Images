@@ -1,0 +1,31 @@
+name: Export refined family carousel files
+on:
+  push:
+    paths:
+      - '.github/workflows/export-family-refined.yml'
+      - '2026-10-18-family-immigration-refined/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify exact five original-template renders
+        run: |
+          cd 2026-10-18-family-immigration-refined
+          cat > /tmp/family-sha256.txt <<'SHA'
+          9aba873fbbd7c34246ce24c4caca9464334a8a018b4481321843b1dbfe06f89f  01.png
+          626708753ec578259fe58387034a8b4f9b2d658086691fcf69d67af7513756b0  02.png
+          0a43f8c32aa671d967f1951022c0b1f7250e180cbad8646368926fe796a3146e  03.png
+          cc17803d8e53ad68b0662fc27ca8e4f6fdacfebd02c208b4d57b69341ece92f5  04.png
+          223114a5b73003ea21c37215adbe3aae70f41b161d8e30d27ca87660081422bc  05.png
+          SHA
+          sha256sum -c /tmp/family-sha256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SteelYourCase_Family_Refined_Verification
+          path: 2026-10-18-family-immigration-refined/
+          retention-days: 7
+          compression-level: 0
